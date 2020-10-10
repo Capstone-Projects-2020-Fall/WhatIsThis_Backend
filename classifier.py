@@ -27,5 +27,8 @@ class Classifier:
     def image_recognition(self):
         """ IMAGE RECOGNITION FUNCTION """
 
+    def save_model(self, model):
+        """ SAVE MODEL FUNCTION """
+
 if __name__ == '__main__':
     print(tf.version.VERSION)

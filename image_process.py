@@ -20,6 +20,9 @@ class ImageProcess:
     def grayscale(self, image):
         """ GRAYSCALE FUNCTION """
 
+    def rotation(self, image):
+        """ ROTATION FUNCTION """
+
 
 if __name__ == '__main__':
     sampleImage = cv2.imread("dataset_original/treadmill/treadmill_001.jpg")
