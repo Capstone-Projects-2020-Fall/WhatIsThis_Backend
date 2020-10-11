@@ -1,0 +1,22 @@
+DEVELOPMENT ENVIRONMENT:
+
+Python Version: 3.7.9 (64-bit)
+IDE: Visual Studio Code
+
+Libraries (version):
+    tensorflow (2.1.0)
+    opencv-contrib-python (4.4.0.44)
+    numpy (1.19.1)
+
+Setup Machine Learning Environment:
+1. Download Anaconda 3
+2. Go to Anaconda Prompt an and create virtual environment (command: conda create -n machine_learning python=3.7)
+3. Go to Anaconda Navigator and select the machine_learning virtual environment
+4. Click the dropdown menu and select All
+5. Find the required libraries from the search bar and install them
+6. VSCode > File > Preferences > Settings > Search Settings "conda" > Conda Path: C:\Users\user_name\anaconda3\Scripts
+7. Click the left bottom where it says "Python (version) 64-bit" and select the machine_learning virtual environment
+8. Run test codes to make sure they are installed properly
+
+Alternatively, use "conda install library_name" or "pip install library_name" to install libraries.
+
