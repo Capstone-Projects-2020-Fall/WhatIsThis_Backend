@@ -13,6 +13,8 @@ class ImageProcess:
 
     def resize(self, image):
         """ RESIZE FUNCTION """
+        resized = cv2. resize(image, (300, 300))
+        return resized
 
     def square(self, image):
         """ SQURE FUNCTION """
@@ -27,3 +29,8 @@ class ImageProcess:
 if __name__ == '__main__':
     sampleImage = cv2.imread("dataset_original/treadmill/treadmill_001.jpg")
     print(sampleImage.shape)
+    test = ImageProcess()
+
+    # Resize Test
+    resized = test.resize(sampleImage)
+    print(resized.shape)
