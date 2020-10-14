@@ -39,15 +39,27 @@ class ImageProcess:
     def grayscale(self, image):
         """ GRAYSCALE FUNCTION """
 
+        grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        cv2.imshow('Grayscale', grayscale)
+
+        return grayscale
+
     def rotation(self, image):
         """ ROTATION FUNCTION """
 
 
 if __name__ == '__main__':
     sampleImage = cv2.imread("dataset_original/treadmill/treadmill_004.jpg")
+    sampleGreyscaleImage = cv2.imread("dataset_original/dumbbell/dumbbell_004.jpg")
+
     print(sampleImage.shape)
     test = ImageProcess()
 
     # Square Test
     squared = test.square(sampleImage)
-    cv2.imwrite("sample.jpg", squared)
+
+    # Grayscale Test
+    grayscale = test.grayscale(sampleGreyscaleImage)
+
+    cv2.imwrite("test_images/sample.jpg", squared)
+    cv2.imwrite("test_images/grayscaled.jpg", grayscale)
