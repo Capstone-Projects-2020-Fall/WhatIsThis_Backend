@@ -44,9 +44,27 @@ class ImageProcess:
 
         return grayscale
 
+    def nDegreeRotation(self, image, degree):
+        """ NDEGREEROTATION FUNCTION """
+        (rows,cols) = image.shape[:2]
+
+        matrix = cv2.getRotationMatrix2D((cols/2, rows/2), degree, 1)
+        rotation = cv2.warpAffine(image, matrix, (cols, rows))
+
+        return rotation
+
     def rotation(self, image):
         """ ROTATION FUNCTION """
+        degree = 45
+        imageList = []
 
+        while degree != 300:
+            imageList.append(self.nDegreeRotation(image, degree)) 
+            degree -= 15
+            if(degree == -15):
+                degree = 345
+
+        return imageList
 
 if __name__ == '__main__':
     sampleImage = cv2.imread("dataset_original/treadmill/treadmill_004.jpg")
@@ -61,5 +79,11 @@ if __name__ == '__main__':
     # Grayscale Test
     grayscale = test.grayscale(sampleGreyscaleImage)
 
+    # Rotation test
+    rotation = test.rotation(sampleImage)
+
     cv2.imwrite("test_images/sample.jpg", squared)
     cv2.imwrite("test_images/grayscaled.jpg", grayscale)
+
+    for index, image in enumerate(rotation):
+        cv2.imwrite("test_images/rotation" + str(index) + ".jpg", image)
