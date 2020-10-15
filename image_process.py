@@ -13,7 +13,7 @@ class ImageProcess:
 
     def resize(self, image):
         """ RESIZE FUNCTION """
-        resized = cv2. resize(image, (300, 300))
+        resized = cv2. resize(image, (150, 150))
         return resized
 
     def square(self, image):

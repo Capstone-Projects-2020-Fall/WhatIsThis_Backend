@@ -7,22 +7,67 @@ and predicting the type of a training equipment in a submitted image.
 """
 import tensorflow as tf
 import numpy as np
-from cv2 import cv2
+import os
+import keras
+from sklearn.model_selection import train_test_split
+from keras.preprocessing import image
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras.optimizers import Adam
 
 class Classifier:
     """ CLASSIFIER CLASS """
 
-    def load_dataset(self):
-        """ LOAD DATASET FUNCTION """
-
     def data_split(self):
         """ SPLIT DATA FUNCTION """
+        # Parameters
+        input_shape = (150, 150, 3)
+        labels = os.listdir("dataset")
+        num_classes = len(os.listdir("dataset"))
+        # array of x (images) and y (labels)
+        x = []
+        y = []
+        # load dataset and store them in the arraies
+        for i in range(len(labels)):
+                pics = os.listdir(f"dataset/{labels[i]}")
+                for j in range(len(pics)):
+                    path = f"dataset/{labels[i]}/{pics[j]}"
+                    x.append(image.img_to_array(image.load_img(path, target_size=input_shape[:2])))
+                    y.append(i)
+        # Convert to nparray and normalize
+        x = np.asanyarray(x)
+        x /= 255
+        y = np.asanyarray(y)
+        y = keras.utils.to_categorical(y, num_classes)
+        # Split Data
+        x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=3)
+        return x_train, x_test, y_train, y_test, input_shape, num_classes
 
-    def crate_model(self):
+    def crate_model(self, input_shape, num_classes):
         """ CREATE MODEL FUNCTION """
+        # Create machine learning model
+        model = Sequential()
+        model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
+        model.add(Conv2D(64, (3, 3), activation='relu'))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Dropout(0.125))
+        model.add(Flatten())
+        model.add(Dense(128, activation='relu'))
+        model.add(Dropout(0.25))
+        model.add(Dense(num_classes, activation='softmax'))
+        model.compile(loss=keras.losses.categorical_crossentropy, optimizer=Adam(lr=0.000005), metrics=['accuracy'])
+        return model
 
-    def evaluate_accuracy(self):
+    def evaluate_accuracy(self, model, x_train, x_test, y_train, y_test, batch_size, epochs):
         """ EVALUATE ACCURACY FUNCTION """
+        # Train and evaluate the accuracy in each epoch
+        model.fit(x_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            verbose=1,
+            validation_data=(x_test, y_test)
+        )
 
     def image_recognition(self):
         """ IMAGE RECOGNITION FUNCTION """
@@ -31,4 +76,7 @@ class Classifier:
         """ SAVE MODEL FUNCTION """
 
 if __name__ == '__main__':
-    print(tf.version.VERSION)
+    classifier_test = Classifier()
+    x_train, x_test, y_train, y_test, input_shape, num_classes = classifier_test.data_split()
+    model = classifier_test.crate_model(input_shape, num_classes)
+    classifier_test.evaluate_accuracy(model, x_train, x_test, y_train, y_test, 32, 20)
