@@ -7,13 +7,14 @@ the accuracy of the image recognition and shorten the execution time.
 The open source library OpenCV is used for the image processing.
 """
 from cv2 import cv2
+import os
 
 class ImageProcess:
     """ IMAGE PROCESS CLASS """
 
     def resize(self, image):
         """ RESIZE FUNCTION """
-        resized = cv2. resize(image, (150, 150))
+        resized = cv2.resize(image, (150, 150))
         return resized
 
     def square(self, image):
@@ -49,7 +50,7 @@ class ImageProcess:
         (rows,cols) = image.shape[:2]
 
         matrix = cv2.getRotationMatrix2D((cols/2, rows/2), degree, 1)
-        rotation = cv2.warpAffine(image, matrix, (cols, rows))
+        rotation = cv2.warpAffine(image, matrix, (cols, rows), borderValue=(255, 255, 255))
 
         return rotation
 
@@ -66,13 +67,30 @@ class ImageProcess:
 
         return imageList
 
+    def dataset_augmentation(self):
+        labels = os.listdir("dataset_original")
+        for i in range(len(labels)):
+            pics = os.listdir(f"dataset_original/{labels[i]}")
+            for j in range(len(pics)):
+                path = f"dataset_original/{labels[i]}/{pics[j]}"
+                pic = cv2.imread(path)
+                pic = self.square(pic)
+                pic = self.grayscale(pic)
+                pic = self.resize(pic)
+                images = self.rotation(pic)
+                for index, image in enumerate(images):
+                    # Change test_images to dataset for the actual image recognition use
+                    cv2.imwrite(f"test_images/{labels[i]}/{labels[i]}_{(j * 6) + index}.jpg", image)
+
 if __name__ == '__main__':
+    
     sampleImage = cv2.imread("dataset_original/treadmill/treadmill_004.jpg")
     sampleGreyscaleImage = cv2.imread("dataset_original/dumbbell/dumbbell_004.jpg")
 
     print(sampleImage.shape)
     test = ImageProcess()
-
+    
+    """
     # Square Test
     squared = test.square(sampleImage)
 
@@ -87,3 +105,6 @@ if __name__ == '__main__':
 
     for index, image in enumerate(rotation):
         cv2.imwrite("test_images/rotation" + str(index) + ".jpg", image)
+    """
+
+    test.dataset_augmentation()
