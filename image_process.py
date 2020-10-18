@@ -41,7 +41,6 @@ class ImageProcess:
         """ GRAYSCALE FUNCTION """
 
         grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('Grayscale', grayscale)
 
         return grayscale
 
@@ -80,7 +79,7 @@ class ImageProcess:
                 images = self.rotation(pic)
                 for index, image in enumerate(images):
                     # Change test_images to dataset for the actual image recognition use
-                    cv2.imwrite(f"test_images/{labels[i]}/{labels[i]}_{(j * 6) + index}.jpg", image)
+                    cv2.imwrite(f"dataset/{labels[i]}/{labels[i]}_{(j * 6) + index}.jpg", image)
 
 if __name__ == '__main__':
     
