@@ -5,10 +5,12 @@
 This function will be responsible for creating the machine learning model
 and predicting the type of a training equipment in a submitted image.
 """
+import image_process
 import tensorflow as tf
 import numpy as np
 import os
 import keras
+from cv2 import cv2
 from sklearn.model_selection import train_test_split
 from keras.preprocessing import image
 from keras.models import Sequential
@@ -69,14 +71,40 @@ class Classifier:
             validation_data=(x_test, y_test)
         )
 
-    def image_recognition(self):
+    def image_recognition(self, path):
         """ IMAGE RECOGNITION FUNCTION """
+        model = keras.models.load_model("demo1_model.h5")
+        img_proc = image_process.ImageProcess()
+
+        img = cv2.imread(path)
+        img = img_proc.square(img)
+        img = img_proc.grayscale(img)
+        img = img_proc.resize(img)
+        cv2.imwrite(f"target.jpg", img)
+
+        target_image= []
+        input_shape = (150, 150, 3)
+
+        target_image.append(image.img_to_array(image.load_img("target.jpg", target_size=input_shape[:2])))
+        target_image = np.asanyarray(target_image)
+        target_image /= 255
+
+        acc = model.predict(target_image)
+        
+        return acc
+
 
     def save_model(self, model):
         """ SAVE MODEL FUNCTION """
+        model.save("demo1_model.h5")
 
 if __name__ == '__main__':
     classifier_test = Classifier()
+    """
     x_train, x_test, y_train, y_test, input_shape, num_classes = classifier_test.data_split()
     model = classifier_test.crate_model(input_shape, num_classes)
     classifier_test.evaluate_accuracy(model, x_train, x_test, y_train, y_test, 32, 20)
+    """
+
+    accuracy_matrix = classifier_test.image_recognition("dataset/treadmill/treadmill_34.jpg")
+    print(accuracy_matrix)
