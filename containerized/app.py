@@ -15,9 +15,13 @@ import sys
 import base64
 from io import BytesIO
 from PIL import Image
+import cv2
+import numpy as np
 
 # Flask Modules
 from flask import Flask, request, Response
+from werkzeug.datastructures import FileStorage
+
 
 # Variables
 MODEL_DIR = os.path.join(os.getcwd(), "model")
@@ -35,11 +39,21 @@ def predict():
     """ PREDICT THE POTENTIAL PIECE OF EQUIPMENT BASED ON THE REQUEST """
 
     # Get the request
-    print(request)
-    imgsource = request.FILES['imgsource']
-    image = Image.open(BytesIO(base64.b64decode(imgsource)))
+    
+    profile = request.json.get('profile')
+    imageJson = profile.get('imgsource')
 
-    print(image)
+    # imageString = base64.b64decode(imageJson)
+    print(imageJson)
+    # nparr = np.frombuffer(imageString, np.uint8)
+    imgdata = base64.b64decode(str(imageJson))
+    image = Image.open(BytesIO(imgdata))
+    img =  cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+    # img = cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
+    cv2.imwrite("test.jpg", img)
+    #cv2.waitKey(0)
+
+    
 
     # Process the request, if necessary
 
