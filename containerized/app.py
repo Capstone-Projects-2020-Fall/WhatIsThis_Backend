@@ -15,8 +15,11 @@ import sys
 import base64
 from io import BytesIO
 from PIL import Image
-import cv2
+from cv2 import cv2
 import numpy as np
+import image_process
+import classifier
+import tensorflow as tf
 
 # Flask Modules
 from flask import Flask, request, Response
@@ -37,23 +40,18 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     """ PREDICT THE POTENTIAL PIECE OF EQUIPMENT BASED ON THE REQUEST """
+    name = request.json.get('image_name')
+    data = request.json.get('data')
+    path = "temp/" + name
 
-    # Get the request
-    
-    profile = request.json.get('profile')
-    imageJson = profile.get('imgsource')
-
-    # imageString = base64.b64decode(imageJson)
-    print(imageJson)
-    # nparr = np.frombuffer(imageString, np.uint8)
-    imgdata = base64.b64decode(str(imageJson))
+    imgdata = base64.b64decode(str(data))
     image = Image.open(BytesIO(imgdata))
-    img =  cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
-    # img = cv2.imdecode(nparr, cv2.IMREAD_ANYCOLOR)
-    cv2.imwrite("test.jpg", img)
-    #cv2.waitKey(0)
+    img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
+    cv2.imwrite(path, img)
 
-    
+    predictor = classifier.Classifier()
+    predicted_label = predictor.image_recognition(path)
+    print(predicted_label)
 
     # Process the request, if necessary
 

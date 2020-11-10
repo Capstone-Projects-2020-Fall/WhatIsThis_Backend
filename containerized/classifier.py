@@ -104,7 +104,10 @@ if __name__ == '__main__':
     x_train, x_test, y_train, y_test, input_shape, num_classes = classifier_test.data_split()
     model = classifier_test.crate_model(input_shape, num_classes)
     classifier_test.evaluate_accuracy(model, x_train, x_test, y_train, y_test, 32, 20)
-    """
+    
 
     accuracy_matrix = classifier_test.image_recognition("dataset/treadmill/treadmill_34.jpg")
     print(accuracy_matrix)
+    """
+
+    print(tf.version.VERSION)
