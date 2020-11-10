@@ -2,9 +2,8 @@
 test_images
 demo_images
 demo_images_modified
-demo1_model.h5
 demo1.ipynb
-target.jpg
 dataset
 __pycache__
-test.jpg
+containerized/temp/*
+containerized/model/*

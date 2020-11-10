@@ -19,16 +19,12 @@ from cv2 import cv2
 import numpy as np
 import image_process
 import classifier
-import tensorflow as tf
 
 # Flask Modules
 from flask import Flask, request, Response
-from werkzeug.datastructures import FileStorage
-
 
 # Variables
 MODEL_DIR = os.path.join(os.getcwd(), "model")
-
 
 """
     Main program is located here. Responsible for handling the requests and sending 
@@ -40,26 +36,27 @@ app = Flask(__name__)
 @app.route('/predict', methods=['POST'])
 def predict():
     """ PREDICT THE POTENTIAL PIECE OF EQUIPMENT BASED ON THE REQUEST """
+    """
+        RECEIVING JSON FORMAT:
+        {
+            "image_name" : "XXXX.jpg"
+            "data" : "BASE64_STRING_IMAGE_DATA"
+        }
+    """
+    # Extract infomation from the JSON
     name = request.json.get('image_name')
     data = request.json.get('data')
-    path = "temp/" + name
-
+    path = "containerized/temp/" + name
+    # Decode the BASE64 image and save it into the temp file
     imgdata = base64.b64decode(str(data))
     image = Image.open(BytesIO(imgdata))
     img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
     cv2.imwrite(path, img)
-
+    # Call the image recognition function
     predictor = classifier.Classifier()
     predicted_label = predictor.image_recognition(path)
     print(predicted_label)
 
-    # Process the request, if necessary
-
-    # Run the image recognition model 
-
-    # Construct the response
-
-    # Return the response
     return Response(status=200)
 if __name__ == "__main__":
     app.run(port=8080, threaded=True)
