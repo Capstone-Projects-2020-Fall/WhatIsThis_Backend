@@ -6,16 +6,15 @@ This function will be responsible for creating the machine learning model
 and predicting the type of a training equipment in a submitted image.
 """
 import image_process
-import tensorflow as tf
 import numpy as np
 import os
 import keras
-from cv2 import cv2
+import cv2
+import requests
 from sklearn.model_selection import train_test_split
 from keras.preprocessing import image
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.optimizers import Adam
 
 class Classifier:
@@ -104,10 +103,8 @@ if __name__ == '__main__':
     x_train, x_test, y_train, y_test, input_shape, num_classes = classifier_test.data_split()
     model = classifier_test.crate_model(input_shape, num_classes)
     classifier_test.evaluate_accuracy(model, x_train, x_test, y_train, y_test, 32, 20)
-    
+    """
 
     accuracy_matrix = classifier_test.image_recognition("dataset/treadmill/treadmill_34.jpg")
     print(accuracy_matrix)
-    """
-
-    print(tf.version.VERSION)
+    
