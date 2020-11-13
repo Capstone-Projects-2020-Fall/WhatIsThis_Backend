@@ -14,6 +14,7 @@ import os
 import sys
 import base64
 import requests
+import jsonpickle
 from io import BytesIO
 from PIL import Image
 from cv2 import cv2
@@ -26,6 +27,16 @@ from flask import Flask, request, Response
 
 # Variables
 MODEL_DIR = os.path.join(os.getcwd(), "model")
+
+MAP = {0:'bench',
+       1:'benchpress',
+       2:'bicycle',
+       3:'dumbbell',
+       4:'legpress',
+       5:'pullupbar',
+       6:'squatrack',
+       7:'treadmill',
+       8:'yogamat'}
 
 """
     Main program is located here. Responsible for handling the requests and sending 
@@ -40,11 +51,14 @@ def predict():
     """
         RECEIVING JSON FORMAT:
         {
-            "data" : "BASE64_STRING_IMAGE_DATA"
+            "body" :
+                "imgsource" : *base64 value*
         }
     """
     # Extract infomation from the JSON
-    data = request.json.get('data')
+    bodyJson = request.json.get('body')
+    data = bodyJson.get('imgsource')
+
     path = "containerized/temp/test.jpg"
     # Decode the BASE64 image and save it into the temp file
     imgdata = base64.b64decode(str(data))
@@ -68,6 +82,8 @@ def predict():
     predictor = classifier.Classifier()
     predicted_label = predictor.image_recognition('containerized/temp/test.png')
     print(predicted_label)
+
+    max_index = 0
 
     return Response(status=200)
 if __name__ == "__main__":
