@@ -14,7 +14,7 @@ import os
 import sys
 import base64
 import requests
-import jsonpickle
+import json
 from io import BytesIO
 from PIL import Image
 from cv2 import cv2
@@ -83,8 +83,11 @@ def predict():
     predicted_label = predictor.image_recognition('containerized/temp/test.png')
     print(predicted_label)
 
-    max_index = 0
+    max_index = np.argmax(predicted_label[0])
+    probability = str(float(predicted_label[0][max_index]*100))
+    data_response = {MAP.get(max_index) : probability}
+    response_json = json.dumps(data_response, indent = 4)
 
-    return Response(status=200)
+    return Response(response = response_json, status=200)
 if __name__ == "__main__":
     app.run(port=8080, threaded=True)
