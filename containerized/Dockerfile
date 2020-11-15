@@ -5,7 +5,7 @@ RUN apt-get update
 RUN apt-get install 'ffmpeg'\
     'libsm6'\ 
     'libxext6'  -y
-RUN pip install keras==2.3.1
+RUN pip install keras==2.2.5
 RUN pip install -r requirements.txt
 EXPOSE 5000
 CMD ["python", "./app.py"]
