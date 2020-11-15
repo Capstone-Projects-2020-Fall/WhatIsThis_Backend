@@ -9,6 +9,7 @@ The open source library OpenCV is used for the image processing.
 from cv2 import cv2
 import os
 
+
 class ImageProcess:
     """ IMAGE PROCESS CLASS """
 
