@@ -74,7 +74,7 @@ def predict():
         'https://api.remove.bg/v1.0/removebg',
         files={'image_file': open('./temp/test.png', 'rb')},
         data={'size': 'auto', 'bg_color': 'white'},
-        headers={'X-Api-Key': 'TR4kRBeFb6Uwfwg3Q8yPS1Ss'},
+        headers={'X-Api-Key': 'iTUtE8hsnt76HMLmfjPAi2hp'},
     )
     if r.status_code == requests.codes.ok:
         with open('./temp/test.png', 'wb') as out:
