@@ -4,9 +4,11 @@ Python Version: 3.7.9 (64-bit)
 IDE: Visual Studio Code
 
 Libraries (version):
-    tensorflow (2.1.0)
-    opencv-contrib-python (4.4.0.44)
-    numpy (1.19.1)
+    tensorflow (2.3.1)
+    keras (2.4.3)
+    opencv (4.0.1)
+    numpy (1.18.5)
+    flask (1.1.2)
 
 Setup Machine Learning Environment:
 1. Download Anaconda 3
