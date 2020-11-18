@@ -31,7 +31,23 @@ If you need a refresher on git, there is a good cheatsheet [here](https://www.at
 6a. Now your docker container is running, and you can access the image recognition at localhost:8080/predict.
 6b. This backend receives POST requests with a base64 encoded image as "imgsource". (To ensure container is running properly, you can check localhost:8080, and you should see a "Hello World!" message)
 
+## Sending Post Requests
+A good way to send POST requests once your backend server is running is through Postman ( https://www.postman.com/ ). Once you have downloaded postman, you can begin to send POST requests to the backend server by doing the following.
+
+1. Set the correct Request Method (POST, GET, PUT, DELETE), we want POST.
+2. Set the url for the request to be sent to, in our case it's localhost:8080/predict
+3. Click "Body" below the request url, and then click "Raw"
+4. Create the JSON object containiing the image you want passed in * Note this should be in base64. You can use ( https://www.base64encode.org/ ) to encode images into base64. *
+5. The JSON object should follow the format of 
+    {
+        "body" : {
+            "imgsource" : " * base64 string here* "
+        }
+    }
+6. Click "Send" next to the url you put in for the request. You should receive a response with equipment name and accuracy.
+
 ## Development Environment
+### Note: If you follow the Building Backend Server above, you should not have to worry  ### about the versioning below.
 1. Python Version : 3.7.9 (64-bit)
 2. IDE: Visual Studio Code
 3. Libraries (version):
