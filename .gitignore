@@ -1,0 +1,9 @@
+.vscode
+test_images
+demo_images
+demo_images_modified
+demo1.ipynb
+dataset
+__pycache__
+containerized/temp/*
+containerized/model/*
