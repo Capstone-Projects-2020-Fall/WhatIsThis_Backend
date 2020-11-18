@@ -30,3 +30,13 @@ If you need a refresher on git, there is a good cheatsheet [here](https://www.at
 5. Once the image has successfully been built from step 4, use command "docker run -p 8080:5000 <dockerusername>/<appname>"
 6a. Now your docker container is running, and you can access the image recognition at localhost:8080/predict.
 6b. This backend receives POST requests with a base64 encoded image as "imgsource". (To ensure container is running properly, you can check localhost:8080, and you should see a "Hello World!" message)
+
+## Development Environment
+1. Python Version : 3.7.9 (64-bit)
+2. IDE: Visual Studio Code
+3. Libraries (version):
+    tensorflow (2.3.1)
+    keras (2.4.3)
+    opencv (4.0.1)
+    numpy (1.18.5)
+    flask (1.1.2)
