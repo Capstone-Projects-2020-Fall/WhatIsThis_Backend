@@ -21,7 +21,6 @@ from cv2 import cv2
 import numpy as np
 import image_process
 import classifier
-import pyperclip
 
 # Flask Modules
 from flask import Flask, request, Response
@@ -65,7 +64,7 @@ def predict():
     """
     # Extract infomation from the JSON
     data = request.get_json(force=True).get('imgsource')
-    
+
     path = DIRECTORY_PATH + "/temp/test.png"
     # Decode the BASE64 image and save it into the temp file
     imgdata = base64.b64decode(str(data))
