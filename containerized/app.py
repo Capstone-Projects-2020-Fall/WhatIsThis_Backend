@@ -63,7 +63,7 @@ def predict():
     bodyJson = request.get_json(force=True).get('body')
     data = bodyJson.get('imgsource')
 
-    path = "./temp/test.png"
+    path = "containerized/temp/test.png"
     # Decode the BASE64 image and save it into the temp file
     imgdata = base64.b64decode(str(data))
     image = Image.open(BytesIO(imgdata))
@@ -72,19 +72,19 @@ def predict():
 
     r = requests.post(
         'https://api.remove.bg/v1.0/removebg',
-        files={'image_file': open('./temp/test.png', 'rb')},
+        files={'image_file': open('containerized/temp/test.png', 'rb')},
         data={'size': 'auto', 'bg_color': 'white'},
         headers={'X-Api-Key': 'iTUtE8hsnt76HMLmfjPAi2hp'},
     )
     if r.status_code == requests.codes.ok:
-        with open('./temp/test.png', 'wb') as out:
+        with open('containerized/temp/test.png', 'wb') as out:
             out.write(r.content)
     else:
         print("Error:", r.status_code, r.text)
 
     # Call the image recognition function
     predictor = classifier.Classifier()
-    predicted_label = predictor.image_recognition('./temp/test.png')
+    predicted_label = predictor.image_recognition('containerized/temp/test.png')
     print(predicted_label)
 
     max_index = np.argmax(predicted_label[0])
