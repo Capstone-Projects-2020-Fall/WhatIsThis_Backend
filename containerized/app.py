@@ -30,6 +30,8 @@ current_directory = os.getcwd()
 
 if 'containerized' not in current_directory :
     DIRECTORY_PATH = current_directory + '/containerized'
+else :
+    DIRECTORY_PATH = '.'
 
 MAP = {0:'bench',
        1:'benchpress',
