@@ -93,7 +93,9 @@ def predict():
 
     max_index = np.argmax(predicted_label[0])
     probability = str(float(predicted_label[0][max_index]*100))
-    data_response = {MAP.get(max_index) : probability}
+    data_response = {'equipment' : MAP.get(max_index),
+                    'probability' : probability
+                    }
     response_json = json.dumps(data_response, indent = 4)
 
     return Response(response = response_json, status=200)
