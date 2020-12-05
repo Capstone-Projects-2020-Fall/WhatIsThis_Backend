@@ -33,8 +33,8 @@ if 'containerized' not in current_directory :
 else :
     DIRECTORY_PATH = '.'
 
-MAP = {0:'bench',
-       1:'benchpress',
+MAP = {0:'barbell',
+       1:'bench-benchpress',
        2:'bicycle',
        3:'dumbbell',
        4:'legpress',
