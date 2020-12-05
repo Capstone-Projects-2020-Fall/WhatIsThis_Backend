@@ -17,7 +17,14 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.optimizers import Adam
 
+""" PATHING VARIABLES """
+""" Either ./containerized or ./ is the root directory """ 
 
+current_directory = os.getcwd()
+
+if 'containerized' not in current_directory :
+    DIRECTORY_PATH = current_directory + '/containerized'
+    
 class Classifier:
     """ CLASSIFIER CLASS """
 
@@ -73,19 +80,19 @@ class Classifier:
 
     def image_recognition(self, path):
         """ IMAGE RECOGNITION FUNCTION """
-        model = keras.models.load_model("containerized/model/demo2_1_model.h5")
+        model = keras.models.load_model(DIRECTORY_PATH + "/model/demo2_1_model.h5")
         img_proc = image_process.ImageProcess()
 
         img = cv2.imread(path)
         img = img_proc.square(img)
         img = img_proc.grayscale(img)
         img = img_proc.resize(img)
-        cv2.imwrite(f"containerized/temp/target.jpg", img)
+        cv2.imwrite(DIRECTORY_PATH + "/temp/target.jpg", img)
 
         target_image= []
         input_shape = (150, 150, 3)
 
-        target_image.append(image.img_to_array(image.load_img("containerized/temp/target.jpg", target_size=input_shape[:2])))
+        target_image.append(image.img_to_array(image.load_img( DIRECTORY_PATH + "/temp/target.jpg", target_size=input_shape[:2])))
         target_image = np.asanyarray(target_image)
         target_image /= 255
 
