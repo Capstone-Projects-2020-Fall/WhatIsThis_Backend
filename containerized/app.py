@@ -33,6 +33,10 @@ if 'containerized' not in current_directory :
 else :
     DIRECTORY_PATH = '.'
 
+API_KEYS = ['txEBLFZe2mfBtNZqvKLk3Hoy']
+api_call_counter = 0
+api_call_index = 0
+
 MAP = {0:'barbell',
        1:'bench-benchpress',
        2:'bicycle',
@@ -64,6 +68,8 @@ def predict():
                 "imgsource" : *base64 value*
         }
     """
+    global api_call_counter
+    global api_call_index
     # Extract infomation from the JSON
     data = request.get_json(force=True).get('imgsource')
 
@@ -74,11 +80,24 @@ def predict():
     img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
     cv2.imwrite(path, img)
 
+    api_call_counter += 1
+
+    print("API count is at" + str(api_call_counter))
+
+    if(api_call_counter%50 == 0):
+        api_call_index = api_call_index + 1
+        print(api_call_index)
+
+    try: 
+        currentApiKey = API_KEYS[api_call_index]
+    except IndexError:
+        currentApiKey = API_KEYS[len(API_KEYS) - 1]
+    
     r = requests.post(
         'https://api.remove.bg/v1.0/removebg',
         files={'image_file': open(DIRECTORY_PATH + '/temp/test.png', 'rb')},
         data={'size': 'auto', 'bg_color': 'white'},
-        headers={'X-Api-Key': 'iTUtE8hsnt76HMLmfjPAi2hp'},
+        headers={'X-Api-Key': currentApiKey},
     )
     if r.status_code == requests.codes.ok:
         with open(DIRECTORY_PATH + '/temp/test.png', 'wb') as out:
