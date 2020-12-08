@@ -26,14 +26,10 @@ import classifier
 from flask import Flask, request, Response
 
 # Directory Variables
-current_directory = os.getcwd()
+# Variables
+MODEL_DIR = os.path.join(os.getcwd(), "model")
 
-if 'containerized' not in current_directory :
-    DIRECTORY_PATH = current_directory + '/containerized'
-else :
-    DIRECTORY_PATH = '.'
-
-API_KEYS = ['txEBLFZe2mfBtNZqvKLk3Hoy']
+API_KEYS = ['9phaAM8KcS3AhfDCaM11k7ui','HbQZes8GbYkJFXaDFNXKq4X5','R4TZRPALDa9SUrQTtpoif49v','4dSs9aJDHqJQro3kZ7wTmt8t','k6RoQRQsHgHuYZZosQmPypad','DfkgcHshkU6ypFaMpBvavULx','jL5eMiF7Mx2hrDfqh5qWGCjG']
 api_call_counter = 0
 api_call_index = 0
 
@@ -68,18 +64,20 @@ def predict():
                 "imgsource" : *base64 value*
         }
     """
+	
     global api_call_counter
     global api_call_index
+	
     # Extract infomation from the JSON
     data = request.get_json(force=True).get('imgsource')
 
-    path = DIRECTORY_PATH + "/temp/test.png"
+    path = "./temp/test.png"
     # Decode the BASE64 image and save it into the temp file
     imgdata = base64.b64decode(str(data))
     image = Image.open(BytesIO(imgdata))
     img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
     cv2.imwrite(path, img)
-
+	
     api_call_counter += 1
 
     print("API count is at" + str(api_call_counter))
@@ -92,22 +90,22 @@ def predict():
         currentApiKey = API_KEYS[api_call_index]
     except IndexError:
         currentApiKey = API_KEYS[len(API_KEYS) - 1]
-    
+
     r = requests.post(
         'https://api.remove.bg/v1.0/removebg',
-        files={'image_file': open(DIRECTORY_PATH + '/temp/test.png', 'rb')},
+        files={'image_file': open('./temp/test.png', 'rb')},
         data={'size': 'auto', 'bg_color': 'white'},
         headers={'X-Api-Key': currentApiKey},
     )
     if r.status_code == requests.codes.ok:
-        with open(DIRECTORY_PATH + '/temp/test.png', 'wb') as out:
+        with open('./temp/test.png', 'wb') as out:
             out.write(r.content)
     else:
         print("Error:", r.status_code, r.text)
 
     # Call the image recognition function
     predictor = classifier.Classifier()
-    predicted_label = predictor.image_recognition(DIRECTORY_PATH + '/temp/test.png')
+    predicted_label = predictor.image_recognition('./temp/test.png')
     print(predicted_label)
 
     max_index = np.argmax(predicted_label[0])
