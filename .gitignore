@@ -5,4 +5,5 @@ demo_images_modified
 demo1.ipynb
 dataset
 __pycache__
+containerized/model/release-model2.h5
 containerized/model/demo2_1_model.h5
