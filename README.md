@@ -20,6 +20,12 @@ Remember, everytime you wish to create a new feature, branch off of develop. Thi
 If there is any confusion, see the link above, or talk to the team leader.
 
 If you need a refresher on git, there is a good cheatsheet [here](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet).
+## Running Pre-Built Backend Server
+1a. If building on Windows, set up WSL 2 https://www.omgubuntu.co.uk/how-to-install-wsl2-on-windows-10
+1b. Install Docker ( https://docs.docker.com/get-docker/ ), create Docker account or log into account.
+2. Use command "docker run -p 8080:5000 markrheimann/whatisthis" in shell of choice (use "docker pull markrheimann/whatisthis" to save image locally).
+3a. Now your docker container is running, and you can access the image recognition at localhost:8080/predict.
+3b. This backend receives POST requests with a base64 encoded image as "imgsource". (To ensure container is running properly, you can check localhost:8080, and you should see a "Hello World!" message)
 
 ## Building Backend server
 1. Clone WhatIsThis_Backend repository into desired directory.
