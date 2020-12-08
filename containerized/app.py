@@ -25,11 +25,16 @@ import classifier
 # Flask Modules
 from flask import Flask, request, Response
 
+# Directory Variables
 # Variables
 MODEL_DIR = os.path.join(os.getcwd(), "model")
 
-MAP = {0:'bench',
-       1:'benchpress',
+API_KEYS = ['9phaAM8KcS3AhfDCaM11k7ui','HbQZes8GbYkJFXaDFNXKq4X5','R4TZRPALDa9SUrQTtpoif49v','4dSs9aJDHqJQro3kZ7wTmt8t','k6RoQRQsHgHuYZZosQmPypad','DfkgcHshkU6ypFaMpBvavULx','jL5eMiF7Mx2hrDfqh5qWGCjG']
+api_call_counter = 0
+api_call_index = 0
+
+MAP = {0:'barbell',
+       1:'bench-benchpress',
        2:'bicycle',
        3:'dumbbell',
        4:'legpress',
@@ -59,9 +64,12 @@ def predict():
                 "imgsource" : *base64 value*
         }
     """
+	
+    global api_call_counter
+    global api_call_index
+	
     # Extract infomation from the JSON
-    bodyJson = request.get_json(force=True).get('body')
-    data = bodyJson.get('imgsource')
+    data = request.get_json(force=True).get('imgsource')
 
     path = "./temp/test.png"
     # Decode the BASE64 image and save it into the temp file
@@ -69,12 +77,25 @@ def predict():
     image = Image.open(BytesIO(imgdata))
     img = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2RGB)
     cv2.imwrite(path, img)
+	
+    api_call_counter += 1
+
+    print("API count is at" + str(api_call_counter))
+
+    if(api_call_counter%50 == 0):
+        api_call_index = api_call_index + 1
+        print(api_call_index)
+
+    try: 
+        currentApiKey = API_KEYS[api_call_index]
+    except IndexError:
+        currentApiKey = API_KEYS[len(API_KEYS) - 1]
 
     r = requests.post(
         'https://api.remove.bg/v1.0/removebg',
         files={'image_file': open('./temp/test.png', 'rb')},
         data={'size': 'auto', 'bg_color': 'white'},
-        headers={'X-Api-Key': 'iTUtE8hsnt76HMLmfjPAi2hp'},
+        headers={'X-Api-Key': currentApiKey},
     )
     if r.status_code == requests.codes.ok:
         with open('./temp/test.png', 'wb') as out:
@@ -89,7 +110,9 @@ def predict():
 
     max_index = np.argmax(predicted_label[0])
     probability = str(float(predicted_label[0][max_index]*100))
-    data_response = {MAP.get(max_index) : probability}
+    data_response = {'equipment' : MAP.get(max_index),
+                    'probability' : probability
+                    }
     response_json = json.dumps(data_response, indent = 4)
 
     return Response(response = response_json, status=200)

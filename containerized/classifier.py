@@ -17,7 +17,10 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.optimizers import Adam
 
+""" PATHING VARIABLES """
 
+
+    
 class Classifier:
     """ CLASSIFIER CLASS """
 
@@ -73,14 +76,14 @@ class Classifier:
 
     def image_recognition(self, path):
         """ IMAGE RECOGNITION FUNCTION """
-        model = keras.models.load_model("./model/demo2_1_model.h5")
+        model = keras.models.load_model("./model/release_model2.h5")
         img_proc = image_process.ImageProcess()
 
         img = cv2.imread(path)
         img = img_proc.square(img)
         img = img_proc.grayscale(img)
         img = img_proc.resize(img)
-        cv2.imwrite(f"./temp/target.jpg", img)
+        cv2.imwrite("./temp/target.jpg", img)
 
         target_image= []
         input_shape = (150, 150, 3)
