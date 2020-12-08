@@ -26,6 +26,7 @@ If you need a refresher on git, there is a good cheatsheet [here](https://www.at
 2a. If building on Windows, set up WSL 2 https://www.omgubuntu.co.uk/how-to-install-wsl2-on-windows-10
 2b. Install Docker ( https://docs.docker.com/get-docker/ ), create Docker account or log into account.
 3. Once Docker is successfully downloaded, navigate to "WhatIsThis_Backend/containerized" directory in your shell of choice.
+4. You will need to add the machine learning model into the ./containerized/model directory. The file is to big to have on github. This model can be found in the build files.
 4. Use command "docker build -t <dockerusername>/<appname> ." replacing <dockerusername> with your personal Docker username and <appname> with whatever name you want to give.
 5. Once the image has successfully been built from step 4, use command "docker run -p 8080:5000 <dockerusername>/<appname>"
 6a. Now your docker container is running, and you can access the image recognition at localhost:8080/predict.
@@ -34,17 +35,22 @@ If you need a refresher on git, there is a good cheatsheet [here](https://www.at
 ## Sending Post Requests
 A good way to send POST requests once your backend server is running is through Postman ( https://www.postman.com/ ). Once you have downloaded postman, you can begin to send POST requests to the backend server by doing the following.
 
+### Part 1 
 1. Set the correct Request Method (POST, GET, PUT, DELETE), we want POST.
 2. Set the url for the request to be sent to, in our case it's localhost:8080/predict
 3. Click "Body" below the request url, and then click "Raw"
 4. Create the JSON object containiing the image you want passed in * Note this should be in base64. You can use ( https://www.base64encode.org/ ) to encode images into base64. *
 5. The JSON object should follow the format of 
     {
-        "body" : {
-            "imgsource" : " * base64 string here* "
-        }
+        "imgsource" : " * base64 string here* "
+        
     }
 6. Click "Send" next to the url you put in for the request. You should receive a response with equipment name and accuracy.
+
+### Part 2
+1. Use the frontend application to send images to the backend. Remember, this would require changing the url of where your server is. So, if you are running it locally
+    you must change the frontend url to reflect wherever you want the POST Request to go to, if that is indeed the localhost.
+
 
 ## Development Environment
 ### Note: If you follow the Building Backend Server above, you should not have to worry  ### about the versioning below.
